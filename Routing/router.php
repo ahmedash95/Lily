@@ -1,18 +1,19 @@
 <?php
 
 namespace Lily\Routing;
+
 use Lily\HTTP\Request;
 use Lily\HTTP\Response;
 
-class Router implements RouterInterface
+class router implements RouterInterface
 {
     /**
-     * Default Controller Name if none is specified in the URI
+     * Default Controller Name if none is specified in the URI.
      */
     const DEFAULT_CONTROLLER = 'index';
 
     /**
-     * Default Action to call if none is specified in the URI
+     * Default Action to call if none is specified in the URI.
      */
     const DEFAULT_ACTION = 'default';
 
@@ -39,7 +40,7 @@ class Router implements RouterInterface
     /**
      * @var array request parameters
      */
-    private $_params = array();
+    private $_params = [];
 
     /**
      * @var RoutingTable
@@ -52,18 +53,22 @@ class Router implements RouterInterface
     public $_finalRequestedURI;
 
     /**
-     * Sets the Request Object
+     * Sets the Request Object.
+     *
      * @param Request $request
+     *
      * @return $this
      */
     public function setRequest(Request $request)
     {
         $this->_request = $request;
+
         return $this;
     }
 
     /**
-     * Returns the HTTP Request Object
+     * Returns the HTTP Request Object.
+     *
      * @return Request
      */
     public function getRequest()
@@ -72,18 +77,22 @@ class Router implements RouterInterface
     }
 
     /**
-     * Sets the Response Object
+     * Sets the Response Object.
+     *
      * @param Response $response
+     *
      * @return $this
      */
     public function setResponse(Response $response)
     {
         $this->_response = $response;
+
         return $this;
     }
 
     /**
-     * Returns the HTTP Response Object
+     * Returns the HTTP Response Object.
+     *
      * @return Response
      */
     public function getResponse()
@@ -92,7 +101,8 @@ class Router implements RouterInterface
     }
 
     /**
-     * Sets the controller name
+     * Sets the controller name.
+     *
      * @param $controller the controller fully qualified name
      */
     public function setController($controller)
@@ -101,7 +111,8 @@ class Router implements RouterInterface
     }
 
     /**
-     * Returns the controller fully qualified name
+     * Returns the controller fully qualified name.
+     *
      * @return string The controller
      */
     public function getController()
@@ -110,7 +121,8 @@ class Router implements RouterInterface
     }
 
     /**
-     * Sets the action name
+     * Sets the action name.
+     *
      * @param $action the action name
      */
     public function setAction($action)
@@ -119,7 +131,8 @@ class Router implements RouterInterface
     }
 
     /**
-     * Returns the action to load
+     * Returns the action to load.
+     *
      * @return string The action
      */
     public function getAction()
@@ -128,7 +141,8 @@ class Router implements RouterInterface
     }
 
     /**
-     * Sets the request parameters array
+     * Sets the request parameters array.
+     *
      * @param array $params the request parameters array
      */
     public function setParams(array $params)
@@ -137,7 +151,8 @@ class Router implements RouterInterface
     }
 
     /**
-     * Returns the request parameters array
+     * Returns the request parameters array.
+     *
      * @return array the request parameters
      */
     public function getParams()
@@ -146,7 +161,8 @@ class Router implements RouterInterface
     }
 
     /**
-     * Returns the final request URI
+     * Returns the final request URI.
+     *
      * @return string the final requested url
      */
     public function getFinalRequestedId()
@@ -156,22 +172,25 @@ class Router implements RouterInterface
 
     /**
      * @param RoutingTable $routeCollection
+     *
      * @return $this
      */
     public function addRoutingTable(RoutingTable $routeCollection)
     {
         $this->_routeCollection = $routeCollection;
+
         return $this;
     }
 
     /**
-     * Parses the url to extract controller name, action name and request parameters
+     * Parses the url to extract controller name, action name and request parameters.
+     *
      * @param $url The requested url
      */
     public function parseRoute($url)
     {
         // Check if the project is on the domain root or a sub folder
-        if(APP_READS_FROM === 'subfolder') {
+        if (APP_READS_FROM === 'subfolder') {
             $url = explode(APP_SUB_FOLDER, $url)[1];
             $url = ltrim($url, '/');
         }
@@ -180,39 +199,39 @@ class Router implements RouterInterface
 
         @list($controller, $action, $params) = explode('/', $url, 3);
 
-        if(isset($controller) && !empty($controller)) {
+        if (isset($controller) && !empty($controller)) {
             $this->_controller = strtolower($controller);
         } else {
             $this->_controller = self::DEFAULT_CONTROLLER;
         }
 
-        if(isset($action) && !empty($action)) {
+        if (isset($action) && !empty($action)) {
             $this->_action = strtolower($action);
         } else {
             $this->_action = self::DEFAULT_ACTION;
         }
 
-        if(isset($params) && !empty($params)) {
+        if (isset($params) && !empty($params)) {
             $this->_params = explode('/', $params);
         } else {
-            $this->_params = array();
+            $this->_params = [];
         }
 
-        $this->_finalRequestedURI  = '/' . $this->_controller;;
-        $this->_finalRequestedURI .= '/' . $this->_action;
-        $this->_finalRequestedURI .= !empty($this->_params) ? '/' . implode('/', $this->_params) : '';
+        $this->_finalRequestedURI = '/'.$this->_controller;
+        $this->_finalRequestedURI .= '/'.$this->_action;
+        $this->_finalRequestedURI .= !empty($this->_params) ? '/'.implode('/', $this->_params) : '';
     }
 
     /**
      * Checks if the route is valid and prepares the router for
-     * the front controller
+     * the front controller.
+     *
      * @return bool
      */
     public function route()
     {
         $this->parseRoute($this->_request->getPath());
-        if(true !== $this->_routeCollection->has($this))
-        {
+        if (true !== $this->_routeCollection->has($this)) {
             $this->_response->setStatusCode(404);
             $this->_response->sendNotFoundHeader($this->_request->getPath());
         }

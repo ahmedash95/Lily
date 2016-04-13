@@ -1,6 +1,6 @@
 <?php
 
-class InputImage extends Input
+class inputimage extends Input
 {
     protected $_alt;
     protected $_formAction;

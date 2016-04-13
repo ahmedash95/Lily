@@ -1,32 +1,33 @@
 <?php
+
 namespace Lily\MVC;
+
 use Lily\Registry\Registry;
 use Lily\Template\Template;
 
 /**
- * Abstract Controller
- * @author fox
+ * Abstract Controller.
  *
+ * @author fox
  */
-abstract class AbstractController
+abstract class abstractcontroller
 {
-
     /**
-     * Controller Name
+     * Controller Name.
      *
      * @var string
      */
     protected $_controller;
 
     /**
-     * Acion Name
+     * Acion Name.
      *
      * @var string
      */
     protected $_action;
 
     /**
-     * Regisry object reference
+     * Regisry object reference.
      *
      * @var Registry
      */
@@ -34,86 +35,87 @@ abstract class AbstractController
 
     /**
      * Data array used to keep track of
-     * all data passed to the view
+     * all data passed to the view.
      *
      * @var array
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      * URL extracted parameters
      * which could be used for
-     * any action
+     * any action.
      *
      * @var array
      */
-    protected $_params = array();
-    
+    protected $_params = [];
+
     /**
-     * A template instance
+     * A template instance.
+     *
      * @var Template
      */
     protected $_template;
-    
+
     /**
-     * Controller name setter
+     * Controller name setter.
      *
-     * @param string $controller            
+     * @param string $controller
      */
-    public function setController ($controller)
+    public function setController($controller)
     {
         $this->_controller = strtolower($controller);
     }
 
     /**
-     * Acion Name setter
+     * Acion Name setter.
      *
-     * @param string $action            
+     * @param string $action
      */
-    public function setAction ($action)
+    public function setAction($action)
     {
         $this->_action = strtolower($action);
     }
 
     /**
-     * Parameters array setter
+     * Parameters array setter.
      *
-     * @param array $params            
+     * @param array $params
      */
-    public function setParams (array $params)
+    public function setParams(array $params)
     {
         $this->_params = (object) $params;
     }
 
     /**
-     * Registry object setter
+     * Registry object setter.
      *
      * @param Registry $registry
      */
-    public function setRegistry (Registry $registry)
+    public function setRegistry(Registry $registry)
     {
         $this->_registry = $registry;
     }
-    
+
     /**
-     * Set the template property to a Template instance
+     * Set the template property to a Template instance.
+     *
      * @param Template $template
      */
     public function setTemplate(Template $template)
     {
         $this->_template = $template;
     }
-    
 
     /**
      * Global setter is used to
      * set any new dynamic attribute
-     * in the registry object
+     * in the registry object.
      *
-     * @param string $key            
-     * @param mixed $value            
+     * @param string $key
+     * @param mixed  $value
      */
-    public function __set ($key, $value)
+    public function __set($key, $value)
     {
         $this->_registry->$key = $value;
     }
@@ -121,11 +123,11 @@ abstract class AbstractController
     /**
      * Global getter is used to
      * get a given value by key
-     * from the registry object
+     * from the registry object.
      *
-     * @param string $key            
+     * @param string $key
      */
-    public function __get ($key)
+    public function __get($key)
     {
         return $this->_registry->$key;
     }
@@ -133,7 +135,7 @@ abstract class AbstractController
     /**
      * @return object
      */
-    public function param ()
+    public function param()
     {
         return $this->_params;
     }
@@ -144,11 +146,11 @@ abstract class AbstractController
      * and action.
      * It users the controller
      * name as a folder name and the action
-     * as a reference to the view file name
+     * as a reference to the view file name.
      */
-    protected function _render ()
+    protected function _render()
     {
-        $viewFile = VIEWS_PATH . DS . $this->_controller . DS . $this->_action .
+        $viewFile = VIEWS_PATH.DS.$this->_controller.DS.$this->_action.
                  '.view.php';
         $this->_template->setData($this->_data);
         $this->_template->setLang($this->lang->getDictionary());
@@ -156,7 +158,7 @@ abstract class AbstractController
         $this->_template->setRegistry($this->_registry);
         $this->_template->drawTemplate();
     }
-    
+
     protected function extractErrors(array $errors)
     {
         foreach ($errors as $key => $value) {

@@ -1,9 +1,10 @@
 <?php
+
 namespace Lily\Core\ACL;
 
-class SalesRole extends Role
+class salesrole extends Role
 {
-    protected $roles = array(
+    protected $roles = [
 
         '/offer',
         '/offer/setup',
@@ -44,7 +45,7 @@ class SalesRole extends Role
         '/client/edit',
         '/client/delete',
         '/client/view',
-        
+
         // General Roles
         '/',
         '/index',
@@ -52,7 +53,7 @@ class SalesRole extends Role
 
         '/employee/profile',
         '/employee/password',
-        
+
         '/settings',
         '/settings/default',
 
@@ -64,7 +65,7 @@ class SalesRole extends Role
         '/mail/reply',
         '/mail/forward',
         '/mail/sent',
-        
+
         '/notification',
         '/notification/view',
         '/notification/delete',
@@ -73,10 +74,10 @@ class SalesRole extends Role
         '/overtime/default',
         '/overtime/add',
         '/overtime/view',
-        
+
         '/auth/login',
         '/auth/logout',
         '/auth/denied',
-        '/notfound'
-    );
+        '/notfound',
+    ];
 }

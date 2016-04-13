@@ -1,9 +1,9 @@
 <?php
+
 namespace Lily\Session;
 
-class SessionManager extends \SessionHandler
+class sessionmanager extends \SessionHandler
 {
-
     /**
      * @var string The Session Cookie name
      */
@@ -56,7 +56,7 @@ class SessionManager extends \SessionHandler
 
     /**
      * @var int the minimum time to live used for the session before replacing the cookie
-     * with a new id
+     *          with a new id
      */
     private $ttl = 30;
 
@@ -67,11 +67,11 @@ class SessionManager extends \SessionHandler
     {
 
         // Check if the session save path is a custom save path and is writable
-        if(SESSION_SAVE_PATH !== ini_get('session.save_path')) {
-            if(!is_dir(SESSION_SAVE_PATH)) {
+        if (SESSION_SAVE_PATH !== ini_get('session.save_path')) {
+            if (!is_dir(SESSION_SAVE_PATH)) {
                 exit('The session file storage folder doesn\'t exists.');
             }
-            if(!is_writable(SESSION_SAVE_PATH)) {
+            if (!is_writable(SESSION_SAVE_PATH)) {
                 exit('The session file storage folder is not writable.');
             }
         }
@@ -99,30 +99,35 @@ class SessionManager extends \SessionHandler
     }
 
     /**
-     * Gets a value from the session
+     * Gets a value from the session.
+     *
      * @param $key
+     *
      * @return mixed
      */
-    public function __get($key) {
-        if(isset($_SESSION[$key])) {
+    public function __get($key)
+    {
+        if (isset($_SESSION[$key])) {
             $data = @unserialize($_SESSION[$key]);
-            if($data === false) {
+            if ($data === false) {
                 return $_SESSION[$key];
             } else {
                 return $data;
             }
         } else {
-            trigger_error('No session key ' . $key . ' exists', E_USER_NOTICE);
+            trigger_error('No session key '.$key.' exists', E_USER_NOTICE);
         }
     }
 
     /**
-     * Adds a value to the session
+     * Adds a value to the session.
+     *
      * @param $key
      * @param $value
      */
-    public function __set($key, $value) {
-        if(is_object($value)) {
+    public function __set($key, $value)
+    {
+        if (is_object($value)) {
             $_SESSION[$key] = serialize($value);
         } else {
             $_SESSION[$key] = $value;
@@ -130,8 +135,10 @@ class SessionManager extends \SessionHandler
     }
 
     /**
-     * __isset magic method
+     * __isset magic method.
+     *
      * @param $key
+     *
      * @return bool
      */
     public function __isset($key)
@@ -140,8 +147,10 @@ class SessionManager extends \SessionHandler
     }
 
     /**
-     * Reads data from session
+     * Reads data from session.
+     *
      * @param string $id The session id
+     *
      * @return string session data
      */
     public function read($id)
@@ -150,9 +159,11 @@ class SessionManager extends \SessionHandler
     }
 
     /**
-     * Writes data to session
-     * @param string $id the session id
+     * Writes data to session.
+     *
+     * @param string $id   the session id
      * @param string $data session data to write
+     *
      * @return bool
      */
     public function write($id, $data)
@@ -161,12 +172,12 @@ class SessionManager extends \SessionHandler
     }
 
     /**
-     * Starts or resuming a session
+     * Starts or resuming a session.
      */
     public function start()
     {
-        if('' === session_id()) {
-            if(session_start()) {
+        if ('' === session_id()) {
+            if (session_start()) {
                 $this->setSessionStartTime();
                 $this->checkSessionValidity();
             }
@@ -174,42 +185,48 @@ class SessionManager extends \SessionHandler
     }
 
     /**
-     * Sets the session start time to compare against the TTL property
+     * Sets the session start time to compare against the TTL property.
+     *
      * @return bool
      */
     private function setSessionStartTime()
     {
-        if(!isset($this->sessionStartTime)) {
+        if (!isset($this->sessionStartTime)) {
             $this->sessionStartTime = time();
         }
+
         return true;
     }
 
     /**
-     * Check wither the session file is valid or not
+     * Check wither the session file is valid or not.
+     *
      * @return bool
      */
     private function checkSessionValidity()
     {
-        if((time() - $this->sessionStartTime) > ($this->ttl * 60)) {
+        if ((time() - $this->sessionStartTime) > ($this->ttl * 60)) {
             $this->renewSession();
             $this->generateFingerPrint();
         }
+
         return true;
     }
 
     /**
-     * Renews the session with a new one
+     * Renews the session with a new one.
+     *
      * @return bool
      */
     private function renewSession()
     {
         $this->sessionStartTime = time();
+
         return session_regenerate_id(true);
     }
 
     /**
-     * Kills the session and purge the session data
+     * Kills the session and purge the session data.
      */
     public function kill()
     {
@@ -225,30 +242,31 @@ class SessionManager extends \SessionHandler
     }
 
     /**
-     * Generate a session finger print
+     * Generate a session finger print.
      */
     private function generateFingerPrint()
     {
         $userAgentId = $_SERVER['HTTP_USER_AGENT'];
         $this->cipherKey = mcrypt_create_iv(16);
         $sessionId = session_id();
-        $this->fingerPrint = md5($userAgentId . $this->cipherKey . $sessionId);
+        $this->fingerPrint = md5($userAgentId.$this->cipherKey.$sessionId);
     }
 
     /**
      * Check if the session is used on the original browser on which
-     * it was generated
+     * it was generated.
+     *
      * @return bool
      */
     public function isValidFingerPrint()
     {
-        if(!isset($this->fingerPrint)) {
+        if (!isset($this->fingerPrint)) {
             $this->generateFingerPrint();
         }
 
-        $fingerPrint = md5($_SERVER['HTTP_USER_AGENT'] . $this->cipherKey . session_id());
+        $fingerPrint = md5($_SERVER['HTTP_USER_AGENT'].$this->cipherKey.session_id());
 
-        if($fingerPrint === $this->fingerPrint) {
+        if ($fingerPrint === $this->fingerPrint) {
             return true;
         }
 
@@ -256,7 +274,7 @@ class SessionManager extends \SessionHandler
     }
 
     /**
-     * Dumps the session data for development purposes
+     * Dumps the session data for development purposes.
      */
     public function dumpSessionVariables()
     {
@@ -264,8 +282,10 @@ class SessionManager extends \SessionHandler
     }
 
     /**
-     * Garbage collecting the session old files
+     * Garbage collecting the session old files.
+     *
      * @param int $maxLifetime
+     *
      * @return void
      */
     public function gc($maxLifetime)

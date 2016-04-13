@@ -1,6 +1,6 @@
 <?php
 
-class InputRadio extends Input
+class inputradio extends Input
 {
     protected $_checked;
 }
