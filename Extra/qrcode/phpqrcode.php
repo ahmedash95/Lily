@@ -1088,7 +1088,7 @@
                 $bs->appendNum(QRspec::lengthIndicator(QR_MODE_NUM, $version), $this->size);
 
                 for ($i = 0; $i < $words; $i++) {
-                    $val = (ord($this->data[$i * 3  ]) - ord('0')) * 100;
+                    $val = (ord($this->data[$i * 3]) - ord('0')) * 100;
                     $val += (ord($this->data[$i * 3 + 1]) - ord('0')) * 10;
                     $val += (ord($this->data[$i * 3 + 2]) - ord('0'));
                     $bs->appendNum(10, $val);
@@ -1098,7 +1098,7 @@
                     $val = ord($this->data[$words * 3]) - ord('0');
                     $bs->appendNum(4, $val);
                 } elseif ($this->size - $words * 3 == 2) {
-                    $val = (ord($this->data[$words * 3  ]) - ord('0')) * 10;
+                    $val = (ord($this->data[$words * 3]) - ord('0')) * 10;
                     $val += (ord($this->data[$words * 3 + 1]) - ord('0'));
                     $bs->appendNum(7, $val);
                 }
@@ -1122,7 +1122,7 @@
                 $bs->appendNum(QRspec::lengthIndicator(QR_MODE_AN, $version), $this->size);
 
                 for ($i = 0; $i < $words; $i++) {
-                    $val = (int) QRinput::lookAnTable(ord($this->data[$i * 2  ])) * 45;
+                    $val = (int) QRinput::lookAnTable(ord($this->data[$i * 2])) * 45;
                     $val += (int) QRinput::lookAnTable(ord($this->data[$i * 2 + 1]));
 
                     $bs->appendNum(11, $val);
@@ -1284,7 +1284,7 @@
                 return -1;
             }
         }
-    };
+    }
 
     //##########################################################################
 
@@ -2905,7 +2905,7 @@
             $this->eccLength = $el;
             $this->ecc = $ecc;
         }
-    };
+    }
 
     //##########################################################################
 
@@ -3266,7 +3266,7 @@
 
             return ['x' => $x, 'y' => $y];
         }
-    };
+    }
 
     //##########################################################################
 

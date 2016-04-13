@@ -53,7 +53,7 @@ class ntlm_sasl_client_class
         $workstation_offset = 32;
         $domain_offset = $workstation_offset + $workstation_length;
 
-        return 
+        return
             "NTLMSSP\0".
             "\x01\x00\x00\x00".
             "\x07\x32\x00\x00".
@@ -111,7 +111,7 @@ class ntlm_sasl_client_class
         $session_length = strlen($session);
         $session_offset = $ntlm_offset + $ntlm_length;
 
-        return 
+        return
             "NTLMSSP\0".
             "\x03\x00\x00\x00".
             pack('v', $lm_length).
@@ -187,4 +187,4 @@ class ntlm_sasl_client_class
 
         return SASL_CONTINUE;
     }
-};
+}
