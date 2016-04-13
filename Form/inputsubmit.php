@@ -1,6 +1,6 @@
 <?php
 
-class InputSubmit extends Input
+class inputsubmit extends Input
 {
     protected $_formAction;
     protected $_formMethod;

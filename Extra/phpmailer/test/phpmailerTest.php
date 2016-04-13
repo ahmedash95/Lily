@@ -5,62 +5,69 @@
  *
  * PHP version 5.0.0
  *
- * @package PHPMailer
  * @author Andy Prevost
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
  * @copyright 2004 - 2009 Andy Prevost
  * @copyright 2010 Marcus Bointon
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
-
 require_once '../PHPMailerAutoload.php';
 
 /**
  * PHPMailer - PHP email transport unit test class
- * Performs authentication tests
+ * Performs authentication tests.
  */
-class PHPMailerTest extends PHPUnit_Framework_TestCase
+class phpmailerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Holds the default phpmailer instance.
+     *
      * @private
-     * @type PHPMailer
+     *
+     * @var PHPMailer
      */
     public $Mail;
 
     /**
      * Holds the SMTP mail host.
+     *
      * @public
-     * @type string
+     *
+     * @var string
      */
     public $Host = '';
 
     /**
      * Holds the change log.
+     *
      * @private
-     * @type string[]
+     *
+     * @var string[]
      */
-    public $ChangeLog = array();
+    public $ChangeLog = [];
 
     /**
      * Holds the note log.
+     *
      * @private
-     * @type string[]
+     *
+     * @var string[]
      */
-    public $NoteLog = array();
+    public $NoteLog = [];
 
     /**
-     * Default include path
-     * @type string
+     * Default include path.
+     *
+     * @var string
      */
     public $INCLUDE_DIR = '../';
 
     /**
-     * PIDs of any processes we need to kill
-     * @type array
-     * @access private
+     * PIDs of any processes we need to kill.
+     *
+     * @var array
      */
-    private $pids = array();
+    private $pids = [];
 
     /**
      * Run before each test is started.
@@ -70,7 +77,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         if (file_exists('./testbootstrap.php')) {
             include './testbootstrap.php'; //Overrides go in here
         }
-        $this->Mail = new PHPMailer;
+        $this->Mail = new PHPMailer();
         $this->Mail->SMTPDebug = 4; //Full debug output
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
@@ -124,8 +131,8 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     {
         // Clean global variables
         $this->Mail = null;
-        $this->ChangeLog = array();
-        $this->NoteLog = array();
+        $this->ChangeLog = [];
+        $this->NoteLog = [];
 
         foreach ($this->pids as $pid) {
             $p = escapeshellarg($pid);
@@ -133,11 +140,11 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         }
     }
 
-
     /**
      * Build the body of the message in the appropriate format.
      *
      * @private
+     *
      * @return void
      */
     public function buildBody()
@@ -159,61 +166,63 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
         $ReportBody = '';
 
-        $ReportBody .= '---------------------' . $eol;
-        $ReportBody .= 'Unit Test Information' . $eol;
-        $ReportBody .= '---------------------' . $eol;
-        $ReportBody .= 'phpmailer version: ' . $this->Mail->Version . $eol;
-        $ReportBody .= 'Content Type: ' . $this->Mail->ContentType . $eol;
+        $ReportBody .= '---------------------'.$eol;
+        $ReportBody .= 'Unit Test Information'.$eol;
+        $ReportBody .= '---------------------'.$eol;
+        $ReportBody .= 'phpmailer version: '.$this->Mail->Version.$eol;
+        $ReportBody .= 'Content Type: '.$this->Mail->ContentType.$eol;
 
         if (strlen($this->Mail->Host) > 0) {
-            $ReportBody .= 'Host: ' . $this->Mail->Host . $eol;
+            $ReportBody .= 'Host: '.$this->Mail->Host.$eol;
         }
 
         // If attachments then create an attachment list
         $attachments = $this->Mail->getAttachments();
         if (count($attachments) > 0) {
-            $ReportBody .= 'Attachments:' . $eol;
+            $ReportBody .= 'Attachments:'.$eol;
             $ReportBody .= $bullet_start;
             foreach ($attachments as $attachment) {
-                $ReportBody .= $bullet . 'Name: ' . $attachment[1] . ', ';
-                $ReportBody .= 'Encoding: ' . $attachment[3] . ', ';
-                $ReportBody .= 'Type: ' . $attachment[4] . $eol;
+                $ReportBody .= $bullet.'Name: '.$attachment[1].', ';
+                $ReportBody .= 'Encoding: '.$attachment[3].', ';
+                $ReportBody .= 'Type: '.$attachment[4].$eol;
             }
-            $ReportBody .= $bullet_end . $eol;
+            $ReportBody .= $bullet_end.$eol;
         }
 
         // If there are changes then list them
         if (count($this->ChangeLog) > 0) {
-            $ReportBody .= 'Changes' . $eol;
-            $ReportBody .= '-------' . $eol;
+            $ReportBody .= 'Changes'.$eol;
+            $ReportBody .= '-------'.$eol;
 
             $ReportBody .= $bullet_start;
             for ($i = 0; $i < count($this->ChangeLog); $i++) {
-                $ReportBody .= $bullet . $this->ChangeLog[$i][0] . ' was changed to [' .
-                    $this->ChangeLog[$i][1] . ']' . $eol;
+                $ReportBody .= $bullet.$this->ChangeLog[$i][0].' was changed to ['.
+                    $this->ChangeLog[$i][1].']'.$eol;
             }
-            $ReportBody .= $bullet_end . $eol . $eol;
+            $ReportBody .= $bullet_end.$eol.$eol;
         }
 
         // If there are notes then list them
         if (count($this->NoteLog) > 0) {
-            $ReportBody .= 'Notes' . $eol;
-            $ReportBody .= '-----' . $eol;
+            $ReportBody .= 'Notes'.$eol;
+            $ReportBody .= '-----'.$eol;
 
             $ReportBody .= $bullet_start;
             for ($i = 0; $i < count($this->NoteLog); $i++) {
-                $ReportBody .= $bullet . $this->NoteLog[$i] . $eol;
+                $ReportBody .= $bullet.$this->NoteLog[$i].$eol;
             }
             $ReportBody .= $bullet_end;
         }
 
         // Re-attach the original body
-        $this->Mail->Body .= $eol . $eol . $ReportBody;
+        $this->Mail->Body .= $eol.$eol.$ReportBody;
     }
 
     /**
      * Check which default settings have been changed for the report.
+     *
      * @private
+     *
      * @return void
      */
     public function checkChanges()
@@ -249,20 +258,24 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
     /**
      * Add a changelog entry.
-     * @access private
+     *
      * @param string $sName
      * @param string $sNewValue
+     *
      * @return void
      */
     public function addChange($sName, $sNewValue)
     {
-        $this->ChangeLog[] = array($sName, $sNewValue);
+        $this->ChangeLog[] = [$sName, $sNewValue];
     }
 
     /**
      * Adds a simple note to the message.
+     *
      * @public
+     *
      * @param string $sValue
+     *
      * @return void
      */
     public function addNote($sValue)
@@ -271,12 +284,13 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Adds all of the addresses
-     * @access public
+     * Adds all of the addresses.
+     *
      * @param string $sAddress
      * @param string $sName
      * @param string $sType
-     * @return boolean
+     *
+     * @return bool
      */
     public function setAddress($sAddress, $sName = '', $sType = 'to')
     {
@@ -288,6 +302,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             case 'bcc':
                 return $this->Mail->addBCC($sAddress, $sName);
         }
+
         return false;
     }
 
@@ -305,7 +320,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test CRAM-MD5 authentication
-     * Needs a connection to a server that supports this auth mechanism, so commented out by default
+     * Needs a connection to a server that supports this auth mechanism, so commented out by default.
      */
     public function testAuthCRAMMD5()
     {
@@ -332,7 +347,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
      */
     public function testValidate()
     {
-        $validaddresses = array(
+        $validaddresses = [
             'first@iana.org',
             'first.last@iana.org',
             '1234567890123456789012345678901234567890123456789012345678901234@iana.org',
@@ -465,12 +480,12 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             'first.last@[IPv6:a1::b2:11.22.33.44]',
             'test@test.com',
             'test@xn--example.com',
-            'test@example.com'
-        );
-        $invalidaddresses = array(
+            'test@example.com',
+        ];
+        $invalidaddresses = [
             'first.last@sub.do,com',
             'first\@last@iana.org',
-            '123456789012345678901234567890123456789012345678901234567890' .
+            '123456789012345678901234567890123456789012345678901234567890'.
                 '@12345678901234567890123456789012345678901234 [...]',
             'first.last',
             '12345678901234567890123456789012345678901234567890123456789012345@iana.org',
@@ -483,7 +498,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             //'""@iana.org',
             'first\@last@iana.org',
             'first.last@',
-            'x@x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.' .
+            'x@x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.'.
                 'x23456789.x23456789.x23456789.x23 [...]',
             'first.last@[.12.34.56.78]',
             'first.last@[12.34.56.789]',
@@ -530,7 +545,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             'test@.',
             'test@example.',
             'test@.org',
-            'test@12345678901234567890123456789012345678901234567890123456789012345678901234567890' .
+            'test@12345678901234567890123456789012345678901234567890123456789012345678901234567890'.
                 '12345678901234567890 [...]',
             'test@[123.123.123.123',
             'test@123.123.123.123]',
@@ -555,10 +570,10 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             'cal(foo(bar)@iamcal.com',
             'cal(foo)bar)@iamcal.com',
             'cal(foo\)@iamcal.com',
-            'first(12345678901234567890123456789012345678901234567890)last@(1234567890123456789' .
+            'first(12345678901234567890123456789012345678901234567890)last@(1234567890123456789'.
                 '01234567890123456789012 [...]',
             'first(middle)last@iana.org',
-            'first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example' .
+            'first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example'.
                 '(abc("def".ghi).mno). [...]',
             'a(a(b(c)d(e(f))g)(h(i)j)@iana.org',
             '.@',
@@ -576,8 +591,8 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             '-@a..com',
             'invalid@about.museum-',
             'test@...........com',
-            '"Unicode NULL' . chr(0) . '"@char.com',
-            'Unicode NULL' . chr(0) . '@char.com',
+            '"Unicode NULL'.chr(0).'"@char.com',
+            'Unicode NULL'.chr(0).'@char.com',
             'first.last@[IPv6::]',
             'first.last@[IPv6::::]',
             'first.last@[IPv6::b4]',
@@ -605,15 +620,15 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             'first.last@[IPv6::a2::b4]',
             'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]',
             'first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]',
-            'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]'
-        );
-        $goodfails = array();
+            'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]',
+        ];
+        $goodfails = [];
         foreach ($validaddresses as $address) {
             if (!PHPMailer::validateAddress($address)) {
                 $goodfails[] = $address;
             }
         }
-        $badpasses = array();
+        $badpasses = [];
         foreach ($invalidaddresses as $address) {
             if (PHPMailer::validateAddress($address)) {
                 $badpasses[] = $address;
@@ -652,13 +667,13 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     {
         $this->Mail->WordWrap = 40;
         $my_body = str_repeat(
-            'Here is the main body of this message.  It should ' .
-            'be quite a few lines.  It should be wrapped at ' .
+            'Here is the main body of this message.  It should '.
+            'be quite a few lines.  It should be wrapped at '.
             '40 characters.  Make sure that it is. ',
             10
         );
         $nBodyLen = strlen($my_body);
-        $my_body .= "\n\nThis is the above body length: " . $nBodyLen;
+        $my_body .= "\n\nThis is the above body length: ".$nBodyLen;
 
         $this->Mail->Body = $my_body;
         $this->Mail->Subject .= ': Wordwrap';
@@ -673,7 +688,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     public function testLowPriority()
     {
         $this->Mail->Priority = 5;
-        $this->Mail->Body = 'Here is the main body.  There should be ' .
+        $this->Mail->Body = 'Here is the main body.  There should be '.
             'a reply to address in this message.';
         $this->Mail->Subject .= ': Low Priority';
         $this->Mail->addReplyTo('nobody@nobody.com', 'Nobody (Unit Test)');
@@ -692,11 +707,13 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
         if (!$this->Mail->addAttachment('../examples/images/phpmailer.png')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
         if (!$this->Mail->addAttachment(__FILE__, 'test.txt')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
@@ -712,8 +729,8 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->Body = 'Here is the text body';
         $this->Mail->Subject .= ': Plain + StringAttachment';
 
-        $sAttachment = 'These characters are the content of the ' .
-            "string attachment.\nThis might be taken from a " .
+        $sAttachment = 'These characters are the content of the '.
+            "string attachment.\nThis might be taken from a ".
             'database or some other such thing. ';
 
         $this->Mail->addStringAttachment($sAttachment, 'string_attach.txt');
@@ -754,9 +771,9 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     public function testHtml()
     {
         $this->Mail->isHTML(true);
-        $this->Mail->Subject .= ": HTML only";
+        $this->Mail->Subject .= ': HTML only';
 
-        $this->Mail->Body = <<<EOT
+        $this->Mail->Body = <<<'EOT'
 <html>
     <head>
         <title>HTML email test</title>
@@ -775,7 +792,7 @@ EOT;
     }
 
     /**
-     * Test simple message builder and html2text converters
+     * Test simple message builder and html2text converters.
      */
     public function testMsgHTML()
     {
@@ -800,7 +817,7 @@ EOT;
     }
 
     /**
-     * Simple HTML and attachment test
+     * Simple HTML and attachment test.
      */
     public function testHTMLAttachment()
     {
@@ -810,11 +827,12 @@ EOT;
 
         if (!$this->Mail->addAttachment(__FILE__, 'test_attach.txt')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
         //Make sure that trying to attach a nonexistent file fails
-        $this->assertFalse($this->Mail->addAttachment(__FILE__ . md5(microtime()), 'nonexistent_file.txt'));
+        $this->assertFalse($this->Mail->addAttachment(__FILE__.md5(microtime()), 'nonexistent_file.txt'));
 
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
@@ -825,7 +843,7 @@ EOT;
      */
     public function testEmbeddedImage()
     {
-        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">' .
+        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">'.
             'Here is an image!</a>';
         $this->Mail->Subject .= ': Embedded Image';
         $this->Mail->isHTML(true);
@@ -839,6 +857,7 @@ EOT;
         )
         ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
@@ -854,7 +873,7 @@ EOT;
      */
     public function testMultiEmbeddedImage()
     {
-        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">' .
+        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">'.
             'Here is an image!</a>';
         $this->Mail->Subject .= ': Embedded Image + Attachment';
         $this->Mail->isHTML(true);
@@ -868,11 +887,13 @@ EOT;
         )
         ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
         if (!$this->Mail->addAttachment(__FILE__, 'test.txt')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
@@ -886,8 +907,8 @@ EOT;
     public function testAltBody()
     {
         $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
-        $this->Mail->AltBody = 'Here is the text body of this message.  ' .
-            'It should be quite a few lines.  It should be wrapped at the ' .
+        $this->Mail->AltBody = 'Here is the text body of this message.  '.
+            'It should be quite a few lines.  It should be wrapped at the '.
             '40 characters.  Make sure that it is.';
         $this->Mail->WordWrap = 40;
         $this->addNote('This is a mulipart alternative email');
@@ -898,7 +919,7 @@ EOT;
     }
 
     /**
-     * Simple HTML and attachment test
+     * Simple HTML and attachment test.
      */
     public function testAltBodyAttachment()
     {
@@ -909,20 +930,21 @@ EOT;
 
         if (!$this->Mail->addAttachment(__FILE__, 'test_attach.txt')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         if (is_writable('.')) {
-            file_put_contents('message.txt', $this->Mail->createHeader() . $this->Mail->createBody());
+            file_put_contents('message.txt', $this->Mail->createHeader().$this->Mail->createBody());
         } else {
             $this->assertTrue(false, 'Could not write local file - check permissions');
         }
     }
 
     /**
-     * iCal event test
+     * iCal event test.
      */
     public function testIcal()
     {
@@ -932,7 +954,7 @@ EOT;
         $this->Mail->isHTML(true);
         $this->buildBody();
         require_once '../extras/EasyPeasyICS.php';
-        $ICS = new EasyPeasyICS("PHPMailer test calendar");
+        $ICS = new EasyPeasyICS('PHPMailer test calendar');
         $ICS->addEvent(
             strtotime('tomorrow 10:00 Europe/Paris'),
             strtotime('tomorrow 11:00 Europe/Paris'),
@@ -942,7 +964,7 @@ EOT;
         );
         $this->Mail->Ical = $ICS->render(false);
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">' .
+        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">'.
             'Here is an image!</a>.';
         $this->Mail->AltBody = 'This is the text part of the email.';
         $this->Mail->Subject .= ': iCal + inline';
@@ -959,7 +981,7 @@ EOT;
     }
 
     /**
-     * Test sending multiple messages with separate connections
+     * Test sending multiple messages with separate connections.
      */
     public function testMultipleSend()
     {
@@ -967,16 +989,16 @@ EOT;
         $this->buildBody();
         $subject = $this->Mail->Subject;
 
-        $this->Mail->Subject = $subject . ': SMTP 1';
+        $this->Mail->Subject = $subject.': SMTP 1';
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
-        $this->Mail->Subject = $subject . ': SMTP 2';
+        $this->Mail->Subject = $subject.': SMTP 2';
         $this->Mail->Sender = 'blah@example.com';
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
-     * Test sending using SendMail
+     * Test sending using SendMail.
      */
     public function testSendmailSend()
     {
@@ -984,13 +1006,13 @@ EOT;
         $this->buildBody();
         $subject = $this->Mail->Subject;
 
-        $this->Mail->Subject = $subject . ': sendmail';
+        $this->Mail->Subject = $subject.': sendmail';
         $this->Mail->isSendmail();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
-     * Test sending using Qmail
+     * Test sending using Qmail.
      */
     public function testQmailSend()
     {
@@ -1000,7 +1022,7 @@ EOT;
             $this->BuildBody();
             $subject = $this->Mail->Subject;
 
-            $this->Mail->Subject = $subject . ': qmail';
+            $this->Mail->Subject = $subject.': qmail';
             $this->Mail->IsQmail();
             $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
         } else {
@@ -1009,7 +1031,7 @@ EOT;
     }
 
     /**
-     * Test sending using PHP mail() function
+     * Test sending using PHP mail() function.
      */
     public function testMailSend()
     {
@@ -1020,19 +1042,19 @@ EOT;
         $this->Mail->Body = 'Sending via mail()';
         $this->buildBody();
 
-        $this->Mail->Subject = $this->Mail->Subject . ': mail()';
+        $this->Mail->Subject = $this->Mail->Subject.': mail()';
         $this->Mail->isMail();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
-     * Test sending an empty body
+     * Test sending an empty body.
      */
     public function testEmptyBody()
     {
         $this->buildBody();
         $this->Mail->Body = '';
-        $this->Mail->Subject = $this->Mail->Subject . ': Empty Body';
+        $this->Mail->Subject = $this->Mail->Subject.': Empty Body';
         $this->Mail->isMail();
         $this->Mail->AllowEmpty = true;
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
@@ -1041,7 +1063,7 @@ EOT;
     }
 
     /**
-     * Test keepalive (sending multiple messages in a single connection)
+     * Test keepalive (sending multiple messages in a single connection).
      */
     public function testSmtpKeepAlive()
     {
@@ -1050,17 +1072,17 @@ EOT;
         $subject = $this->Mail->Subject;
 
         $this->Mail->SMTPKeepAlive = true;
-        $this->Mail->Subject = $subject . ': SMTP keep-alive 1';
+        $this->Mail->Subject = $subject.': SMTP keep-alive 1';
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
-        $this->Mail->Subject = $subject . ': SMTP keep-alive 2';
+        $this->Mail->Subject = $subject.': SMTP keep-alive 2';
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $this->Mail->smtpClose();
     }
 
     /**
      * Tests this denial of service attack:
-     *    http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
+     *    http://www.cybsec.com/vuln/PHPMailer-DOS.pdf.
      */
     public function testDenialOfServiceAttack()
     {
@@ -1085,7 +1107,7 @@ EOT;
     }
 
     /**
-     * Test error handling
+     * Test error handling.
      */
     public function testError()
     {
@@ -1101,7 +1123,7 @@ EOT;
     }
 
     /**
-     * Test addressing
+     * Test addressing.
      */
     public function testAddressing()
     {
@@ -1132,7 +1154,7 @@ EOT;
     }
 
     /**
-     * Test address escaping
+     * Test address escaping.
      */
     public function testAddressEscaping()
     {
@@ -1147,7 +1169,7 @@ EOT;
     }
 
     /**
-     * Test BCC-only addressing
+     * Test BCC-only addressing.
      */
     public function testBCCAddressing()
     {
@@ -1159,7 +1181,7 @@ EOT;
     }
 
     /**
-     * Encoding and charset tests
+     * Encoding and charset tests.
      */
     public function testEncodings()
     {
@@ -1200,8 +1222,9 @@ EOT;
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), 'Base64 encoding failed');
     }
+
     /**
-     * S/MIME Signing tests
+     * S/MIME Signing tests.
      */
     public function testSigning()
     {
@@ -1209,15 +1232,15 @@ EOT;
         $this->Mail->Body = 'This message is S/MIME signed.';
         $this->buildBody();
 
-        $dn = array(
-            'countryName' => 'UK',
-            'stateOrProvinceName' => 'Here',
-            'localityName' => 'There',
-            'organizationName' => 'PHP',
+        $dn = [
+            'countryName'            => 'UK',
+            'stateOrProvinceName'    => 'Here',
+            'localityName'           => 'There',
+            'organizationName'       => 'PHP',
             'organizationalUnitName' => 'PHPMailer',
-            'commonName' => 'PHPMailer Test',
-            'emailAddress' => 'phpmailer@example.com'
-        );
+            'commonName'             => 'PHPMailer Test',
+            'emailAddress'           => 'phpmailer@example.com',
+        ];
         $password = 'password';
         $certfile = 'certfile.txt';
         $keyfile = 'keyfile.txt';
@@ -1246,7 +1269,7 @@ EOT;
     }
 
     /**
-     * DKIM Signing tests
+     * DKIM Signing tests.
      */
     public function testDKIM()
     {
@@ -1258,10 +1281,10 @@ EOT;
         //(2048 bits is the recommended minimum key length -
         //gmail won't accept less than 1024 bits)
         $pk = openssl_pkey_new(
-            array(
+            [
                 'private_key_bits' => 2048,
-                'private_key_type' => OPENSSL_KEYTYPE_RSA
-            )
+                'private_key_type' => OPENSSL_KEYTYPE_RSA,
+            ]
         );
         openssl_pkey_export_to_file($pk, $privatekeyfile);
         $this->Mail->DKIM_domain = 'example.com';
@@ -1273,7 +1296,7 @@ EOT;
     }
 
     /**
-     * Test line break reformatting
+     * Test line break reformatting.
      */
     public function testLineBreaks()
     {
@@ -1289,7 +1312,7 @@ EOT;
     }
 
     /**
-     * Test setting and retrieving message ID
+     * Test setting and retrieving message ID.
      */
     public function testMessageID()
     {
@@ -1303,7 +1326,7 @@ EOT;
     }
 
     /**
-     * Miscellaneous calls to improve test coverage and some small tests
+     * Miscellaneous calls to improve test coverage and some small tests.
      */
     public function testMiscellaneous()
     {
@@ -1344,7 +1367,7 @@ EOT;
 
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth
-     * With a known-good login
+     * With a known-good login.
      */
     public function testPopBeforeSmtpGood()
     {
@@ -1365,7 +1388,7 @@ EOT;
 
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth
-     * With a known-bad login
+     * With a known-bad login.
      */
     public function testPopBeforeSmtpBad()
     {
@@ -1386,31 +1409,31 @@ EOT;
 
     /**
      * Test SMTP host connections.
-     * This test can take a long time, so run it last
+     * This test can take a long time, so run it last.
      */
     public function testSmtpConnect()
     {
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
-        $this->Mail->Host = "ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10";
+        $this->Mail->Host = 'ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10';
         $this->assertFalse($this->Mail->smtpConnect(), 'SMTP bad multi-connect succeeded');
         $this->Mail->smtpClose();
-        $this->Mail->Host = "localhost:12345;10.10.10.10:54321;" . $_REQUEST['mail_host'];
+        $this->Mail->Host = 'localhost:12345;10.10.10.10:54321;'.$_REQUEST['mail_host'];
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP multi-connect failed');
         $this->Mail->smtpClose();
-        $this->Mail->Host = " localhost:12345 ; " . $_REQUEST['mail_host'] . ' ';
+        $this->Mail->Host = ' localhost:12345 ; '.$_REQUEST['mail_host'].' ';
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');
         $this->Mail->smtpClose();
         $this->Mail->Host = $_REQUEST['mail_host'];
         //Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
         $this->assertTrue(
-            $this->Mail->smtpConnect(array('ssl' => array('verify_depth' => 10))),
+            $this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]),
             'SMTP connect with options failed'
         );
     }
 }
 
-/**
+/*
  * This is a sample form for setting appropriate test values through a browser
  * These values can also be set using a file called testbootstrap.php (not in svn) in the same folder as this script
  * which is probably more useful if you run these tests a lot

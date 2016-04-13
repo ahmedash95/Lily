@@ -1,10 +1,11 @@
 <?php
+
 namespace Lily\Core\ACL;
 
-class ReporterRole extends Role
+class reporterrole extends Role
 {
-    protected $roles = array(
-        
+    protected $roles = [
+
         // General Roles
         '/',
         '/index',
@@ -12,7 +13,7 @@ class ReporterRole extends Role
 
         '/employee/profile',
         '/employee/password',
-        
+
         '/settings',
         '/settings/default',
 
@@ -24,7 +25,7 @@ class ReporterRole extends Role
         '/mail/reply',
         '/mail/forward',
         '/mail/sent',
-        
+
         '/notification',
         '/notification/view',
         '/notification/delete',
@@ -33,7 +34,7 @@ class ReporterRole extends Role
         '/overtime/default',
         '/overtime/add',
         '/overtime/view',
-        
+
         '/auth/login',
         '/auth/logout',
         '/auth/denied',
@@ -50,6 +51,6 @@ class ReporterRole extends Role
         '/report/setupcompleted',
         '/report/setupemp',
         '/report/mtninprogress',
-        '/report/mtnemergency'
-    );
+        '/report/mtnemergency',
+    ];
 }

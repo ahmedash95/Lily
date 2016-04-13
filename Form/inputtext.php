@@ -1,11 +1,11 @@
 <?php
+
 namespace Lily\Core\Form;
 
-class InputText extends Input implements InputInterface
+class inputtext extends Input implements InputInterface
 {
-    
     public function inputHTML()
     {
-        return '<input type="text"' . $this->_inputAttributesString . ' />';
+        return '<input type="text"'.$this->_inputAttributesString.' />';
     }
 }

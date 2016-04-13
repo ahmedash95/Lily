@@ -2,9 +2,8 @@
 
 namespace Lily\HTTP;
 
-final class Response
+final class response
 {
-
     // TODO: Read more about the response object
     public function setStatusCode($code)
     {
@@ -14,8 +13,8 @@ final class Response
     public function sendNotFoundHeader($url)
     {
         session_write_close();
-        header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
-        include (NOT_FOUND_404);
+        header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+        include NOT_FOUND_404;
         exit;
     }
 }

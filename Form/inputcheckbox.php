@@ -1,6 +1,6 @@
 <?php
 
-class InputCheckbox extends Input
+class inputcheckbox extends Input
 {
     protected $_checked;
 }

@@ -1,12 +1,14 @@
 <?php
+
 namespace Lily\Core;
-require_once CORE_PATH . DS . 'phpmailer' . DS . 'class.smtp.php';
-require_once CORE_PATH . DS . 'phpmailer' . DS . 'class.phpmailer.php';
 
-class Mailer
+require_once CORE_PATH.DS.'phpmailer'.DS.'class.smtp.php';
+require_once CORE_PATH.DS.'phpmailer'.DS.'class.phpmailer.php';
+
+class mailer
 {
-    public static function notify($email, $subject, $content) {
-
+    public static function notify($email, $subject, $content)
+    {
         $from = 'no-reply@me.com';
         $mail = new \PHPMailer();
         $mail->isSMTP();
@@ -34,14 +36,14 @@ class Mailer
             <table style="width:100%;direction:rtl !important;">
                 <tr>
                     <td style="border-bottom: solid 1px #e4e4e4;">
-                        <h1 style="font-size: 1.5em;color:#f2652a;margin: 0 0 15px 0;direction:rtl;">' . $subject . '</h1>
+                        <h1 style="font-size: 1.5em;color:#f2652a;margin: 0 0 15px 0;direction:rtl;">'.$subject.'</h1>
                     </td>
                 </tr>
                 <tr>
                     <td style="padding: 20px;background: #f1f1f1;">
-                        <p style="font-size:1em;color:#333;padding:0;margin:15px 0 0 0;direction:rtl;">' .
+                        <p style="font-size:1em;color:#333;padding:0;margin:15px 0 0 0;direction:rtl;">'.
                         $content
-                        . '</p>
+                        .'</p>
                     </td>
                 </tr>
                 <tr>
@@ -55,6 +57,7 @@ class Mailer
         if ($mail->send()) {
             return true;
         }
+
         return false;
     }
 }

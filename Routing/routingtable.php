@@ -2,12 +2,12 @@
 
 namespace Lily\Routing;
 
-class RoutingTable
+class routingtable
 {
     /**
      * @var array
      */
-    private $_routingTable = array();
+    private $_routingTable = [];
 
     /**
      * @param $routeID
@@ -15,7 +15,7 @@ class RoutingTable
      */
     public function add($routeID, array $routeDefinition)
     {
-        $this->_routingTable[$routeID] = array();
+        $this->_routingTable[$routeID] = [];
         $this->_routingTable[$routeID]['_controller_'] = $routeDefinition['_controller_path_'];
         $this->_routingTable[$routeID]['_action_'] = $routeDefinition['_action_'];
 
@@ -37,7 +37,7 @@ class RoutingTable
             $roles = $routeDefinition['_roles_'];
             foreach ($roles as $role => $pattern) {
                 $url = preg_replace(
-                    '/({' . $role . '})/i',
+                    '/({'.$role.'})/i',
                     $pattern,
                     $url
                 );
@@ -50,15 +50,17 @@ class RoutingTable
     }
 
     /**
-     * Check wither the routing table has a specific route
+     * Check wither the routing table has a specific route.
+     *
      * @param Router $router
+     *
      * @return bool
      */
     public function has(Router $router)
     {
         $found = false;
         foreach ($this->_routingTable as $routeID => $routeDetails) {
-            if (preg_match("/^" . str_replace('/', '\/', $routeDetails['_url_']) . "$/i", $router->getFinalRequestedId()) &&
+            if (preg_match('/^'.str_replace('/', '\/', $routeDetails['_url_']).'$/i', $router->getFinalRequestedId()) &&
                 in_array($router->getRequest()->getMethod(), $this->_routingTable[$routeID]['_method_'])) {
                 $found = true;
                 break;
@@ -66,15 +68,16 @@ class RoutingTable
         }
         $router->setController($this->_routingTable[$routeID]['_controller_']);
         $router->setAction($this->_routingTable[$routeID]['_action_']);
-        if(!empty($router->getParams())) {
+        if (!empty($router->getParams())) {
             $index = 0;
-            $parameters = array();
+            $parameters = [];
             $routerFetchedParameters = $router->getParams();
             foreach ($this->_routingTable[$routeID]['_params_'] as $parameter) {
                 $parameters[$parameter] = $routerFetchedParameters[$index++];
             }
             $router->setParams($parameters);
         }
+
         return $found;
     }
 }

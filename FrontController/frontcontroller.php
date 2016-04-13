@@ -1,16 +1,15 @@
 <?php
+
 namespace Lily\FrontController;
 
 use Lily\HTTP\Request;
 use Lily\HTTP\Response;
+use Lily\Registry;
 use Lily\Routing;
 use Lily\Template;
-use Lily\Registry;
 
-
-class FrontController 
+class frontcontroller
 {
-
     /**
      * @var string The fully qualified controller name
      */
@@ -24,7 +23,7 @@ class FrontController
     /**
      * @var array The request parameters array
      */
-    private $_params = array();
+    private $_params = [];
 
     /**
      * @var Registry\Registry The registry object
@@ -48,9 +47,10 @@ class FrontController
 
     /**
      * FrontController constructor.
+     *
      * @param Routing\RouterInterface $router
-     * @param Registry\Registry $registry
-     * @param Template\Template $template
+     * @param Registry\Registry       $registry
+     * @param Template\Template       $template
      */
     public function __construct(Routing\RouterInterface $router, Registry\Registry $registry, Template\Template $template)
     {
@@ -65,19 +65,19 @@ class FrontController
 
     /**
      * Creating the appropriate Controller object and
-     * invokes the required action method
+     * invokes the required action method.
      */
     public function dispatch()
     {
-        $className = $this->_controller . 'controller';
+        $className = $this->_controller.'controller';
         $controller = new $className ();
         $controller->setController($this->_controller);
         $controller->setAction($this->_action);
         $controller->setRegistry($this->_registry);
         $controller->setParams($this->_params);
         $controller->setTemplate($this->_template);
-        $method = strtolower($this->_action) . 'Action';
-        if(method_exists($controller, $method)) {
+        $method = strtolower($this->_action).'Action';
+        if (method_exists($controller, $method)) {
             $controller->$method();
         }
     }

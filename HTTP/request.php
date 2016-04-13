@@ -1,9 +1,9 @@
 <?php
+
 namespace Lily\HTTP;
 
-final class Request
+final class request
 {
-
     /**
      * @var object The POST RAW DATA
      */
@@ -24,11 +24,11 @@ final class Request
      */
     public function __construct()
     {
-        if($this->isPost()) {
+        if ($this->isPost()) {
             $this->setPostData();
         }
 
-        if($this->isGet()) {
+        if ($this->isGet()) {
             $this->setGetData();
         }
 
@@ -36,20 +36,23 @@ final class Request
     }
 
     /**
-     * Check wither the request is an AJAX Request
+     * Check wither the request is an AJAX Request.
+     *
      * @return bool
      */
     public function isXMLHTTPRequest()
     {
-        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
             isset($_SERVER['HTTP_X_REQUESTED_WITH']) == 'XMLHttpRequest') {
             return true;
         }
+
         return false;
     }
 
     /**
-     * Get the REFERER header
+     * Get the REFERER header.
+     *
      * @return mixed
      */
     public function getReferer()
@@ -58,7 +61,8 @@ final class Request
     }
 
     /**
-     * Check wither the request is a POST request
+     * Check wither the request is a POST request.
+     *
      * @return bool
      */
     public function isPost()
@@ -67,7 +71,8 @@ final class Request
     }
 
     /**
-     * Check wither the request is a POST request
+     * Check wither the request is a POST request.
+     *
      * @return bool
      */
     public function isGet()
@@ -76,14 +81,14 @@ final class Request
     }
 
     /**
-     * Sets the POST RAW Data
+     * Sets the POST RAW Data.
      */
     public function setPostData()
     {
-        if($this->isPost()) {
+        if ($this->isPost()) {
             $phpWrapper = 'php://input';
             $postRawContent = file_get_contents($phpWrapper);
-            if(strlen($postRawContent) > 0) {
+            if (strlen($postRawContent) > 0) {
                 parse_str($postRawContent, $postData);
                 $this->_POSTData = (object) $postData;
             }
@@ -91,17 +96,17 @@ final class Request
     }
 
     /**
-     * Sets the GET Object Data
+     * Sets the GET Object Data.
      */
     public function setGetData()
     {
-        if($this->isGet()) {
+        if ($this->isGet()) {
             $this->_GETData = (object) $_GET;
         }
     }
 
     /**
-     * Sets the SERVER object Data
+     * Sets the SERVER object Data.
      */
     public function setServerData()
     {
@@ -109,47 +114,58 @@ final class Request
     }
 
     /**
-     * Returns a given value from the POST DATA
+     * Returns a given value from the POST DATA.
+     *
      * @param $key
+     *
      * @return mixed
      */
     public function getPostValue($key)
     {
-        if(!property_exists($this->_POSTData, $key)) {
-            trigger_error('The requested ' . $key . ' does not exists in the POST request', E_USER_NOTICE);
+        if (!property_exists($this->_POSTData, $key)) {
+            trigger_error('The requested '.$key.' does not exists in the POST request', E_USER_NOTICE);
         }
+
         return $this->_POSTData->$key;
     }
 
     /**
-     * Returns a given value from the GET DATA
+     * Returns a given value from the GET DATA.
+     *
      * @param $key
+     *
      * @return mixed
      */
     public function getQueryValue($key)
     {
-        if(!property_exists($this->_GETData, $key)) {
-            trigger_error('The requested ' . $key . ' does not exists in the GET request', E_USER_NOTICE);
+        if (!property_exists($this->_GETData, $key)) {
+            trigger_error('The requested '.$key.' does not exists in the GET request', E_USER_NOTICE);
         }
+
         return $this->_GETData->$key;
     }
 
     /**
-     * Returns a given value from the SERVER DATA
+     * Returns a given value from the SERVER DATA.
+     *
      * @param $key
+     *
      * @return mixed
      */
     public function getServerValue($key)
     {
-        if(!property_exists($this->_SERVERData, $key)) {
-            trigger_error('The requested ' . $key . ' does not exists in the SERVER Super Global', E_USER_NOTICE);
+        if (!property_exists($this->_SERVERData, $key)) {
+            trigger_error('The requested '.$key.' does not exists in the SERVER Super Global', E_USER_NOTICE);
         }
+
         return $this->_SERVERData->$key;
     }
 
     /**
-     * Check wither a value exists in the POST RAW DATA
+     * Check wither a value exists in the POST RAW DATA.
+     *
      * @param $property
+     *
      * @return bool
      */
     public function postHas($property)
@@ -158,8 +174,10 @@ final class Request
     }
 
     /**
-     * Check wither a value exists in the GET DATA
+     * Check wither a value exists in the GET DATA.
+     *
      * @param $property
+     *
      * @return bool
      */
     public function getHas($property)
@@ -168,7 +186,8 @@ final class Request
     }
 
     /**
-     * Returns the URL PATH
+     * Returns the URL PATH.
+     *
      * @return mixed
      */
     public function getPath()
@@ -177,12 +196,12 @@ final class Request
     }
 
     /**
-     * Returns the HTTP Request Method
+     * Returns the HTTP Request Method.
+     *
      * @return mixed
      */
     public function getMethod()
     {
         return $this->_SERVERData->REQUEST_METHOD;
     }
-
 }

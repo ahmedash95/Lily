@@ -1,9 +1,10 @@
 <?php
+
 namespace Lily\Core\ACL;
 
-class ManagerRole extends Role
+class managerrole extends Role
 {
-    protected $roles = array(
+    protected $roles = [
 
         '/employee',
         '/employee/default',
@@ -12,7 +13,7 @@ class ManagerRole extends Role
         '/employee/delete',
         '/employee/view',
         '/employee/resetpassword',
-        
+
         '/client',
         '/client/default',
         '/client/add',
@@ -63,16 +64,15 @@ class ManagerRole extends Role
         '/report/setupemp',
         '/report/mtninprogress',
         '/report/mtnemergency',
-        
 
         // General Roles
         '/',
         '/index',
         '/index/default',
-        
+
         '/employee/profile',
         '/employee/password',
-        
+
         '/settings',
         '/settings/default',
 
@@ -84,7 +84,7 @@ class ManagerRole extends Role
         '/mail/reply',
         '/mail/forward',
         '/mail/sent',
-        
+
         '/notification',
         '/notification/view',
         '/notification/delete',
@@ -93,12 +93,12 @@ class ManagerRole extends Role
         '/overtime/default',
         '/overtime/view',
         '/overtime/approve',
-        
+
         '/auth/login',
         '/auth/logout',
         '/auth/denied',
         '/notfound',
-        '/browser/usechrome'
+        '/browser/usechrome',
 
-    );
+    ];
 }
