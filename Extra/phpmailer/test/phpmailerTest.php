@@ -23,6 +23,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      * Holds the default phpmailer instance.
      *
      * @private
+     *
      * @var PHPMailer
      */
     public $Mail;
@@ -31,6 +32,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      * Holds the SMTP mail host.
      *
      * @public
+     *
      * @var string
      */
     public $Host = '';
@@ -39,6 +41,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      * Holds the change log.
      *
      * @private
+     *
      * @var string[]
      */
     public $ChangeLog = [];
@@ -47,6 +50,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      * Holds the note log.
      *
      * @private
+     *
      * @var string[]
      */
     public $NoteLog = [];

@@ -1641,7 +1641,7 @@ if (!class_exists('QRcode', false)) {
              $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 4, $val);
              $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], $this->lengthIndicator(QR_MODE_NM, $version), $inputitem['size']);
              for ($i = 0; $i < $words; ++$i) {
-                 $val = (ord($inputitem['data'][$i * 3  ]) - ord('0')) * 100;
+                 $val = (ord($inputitem['data'][$i * 3]) - ord('0')) * 100;
                  $val += (ord($inputitem['data'][$i * 3 + 1]) - ord('0')) * 10;
                  $val += (ord($inputitem['data'][$i * 3 + 2]) - ord('0'));
                  $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 10, $val);
@@ -1650,7 +1650,7 @@ if (!class_exists('QRcode', false)) {
                  $val = ord($inputitem['data'][$words * 3]) - ord('0');
                  $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 4, $val);
              } elseif (($inputitem['size'] - ($words * 3)) == 2) {
-                 $val = (ord($inputitem['data'][$words * 3  ]) - ord('0')) * 10;
+                 $val = (ord($inputitem['data'][$words * 3]) - ord('0')) * 10;
                  $val += (ord($inputitem['data'][$words * 3 + 1]) - ord('0'));
                  $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 7, $val);
              }
@@ -1673,7 +1673,7 @@ if (!class_exists('QRcode', false)) {
              $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 4, 0x02);
              $inputitem['bstream'] = $this->appendNum(v, $this->lengthIndicator(QR_MODE_AN, $version), $inputitem['size']);
              for ($i = 0; $i < $words; ++$i) {
-                 $val = (int) $this->lookAnTable(ord($inputitem['data'][$i * 2  ])) * 45;
+                 $val = (int) $this->lookAnTable(ord($inputitem['data'][$i * 2])) * 45;
                  $val += (int) $this->lookAnTable(ord($inputitem['data'][$i * 2 + 1]));
                  $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 11, $val);
              }
@@ -3117,7 +3117,7 @@ if (!class_exists('QRcode', false)) {
             $rs['gfpoly'] = $gfpoly;
             // Find prim-th root of 1, used in decoding
             for ($iprim = 1; ($iprim % $prim) != 0; $iprim += $rs['nn']) {
-                ; // intentional empty-body loop!
+                // intentional empty-body loop!
             }
             $rs['iprim'] = (int) ($iprim / $prim);
             $rs['genpoly'][0] = 1;
